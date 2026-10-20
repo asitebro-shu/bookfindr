@@ -265,10 +265,6 @@ td select {
     #search-form button {
         max-width: 31%;
     }
-
-    .book-card {
-        max-width: 80%;
-    }
 }
 
 @media screen and (min-width: 800px) {
@@ -304,7 +300,13 @@ td select {
         padding: 1rem;
     }
 
-    .book-card {
-        max-width: 80%;
+    #search-results-body {
+        display: grid;
+        grid-template-columns: auto auto auto;
+    }
+
+    #search-results-body .book-card {
+        max-width: 100%;
+        margin: 1px;
     }
 }

@@ -1,7 +1,7 @@
 (function(){
     let mainNavList = [
-        { text: "Home", href: "/index.html" },
-        { text: "My Reading", href: "/myreading.html" },
+        { text: "Home", href: "index.html" },
+        { text: "My Reading", href: "myreading.html" },
     ];
 
     mainNavList.forEach(item => {

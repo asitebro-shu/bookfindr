@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="BookFindr - Discover Your Next Read">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="manifest" href="img/site.webmanifest">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>BookFindr</title>
+</head>
+<body>
+    <header id="main-header">
+        <a href="/" class="logo-wrapper">
+            <img src="img/logo.png" alt="BookFindr Logo" class="logo">
+        </a>
+        <section class="intro">
+            <p class="intro-text">Discover Your Next Read</p>
+        </section>
+    </header>
+    <nav class="main-nav" aria-label="Main Navigation">
+        <a href="index.html">Home</a>
+        <a href="my-list.html">My Reading</a>
+    </nav>
+    <main>
+        
+        <section aria-labelledby="search-form">
+            <form id="search-form">
+                <fieldset>
+                    <legend><p>Use the search bar below to find books by title, author, or keyword.</p></legend>
+                    <input type="search" id="search-query" name="search-query" autofocus placeholder="Enter a book title, author, or keyword" required aria-label="Enter a book title, author, or keyword">
+                    <button type="submit">Search</button>
+                    <button type="button" id="surprise-button">Surprise Me</button>
+                    <button type="reset">Clear</button>
+                </fieldset>
+            </form>
+        </section>
+        <section id="search-results-section" aria-live="polite" aria-labelledby="search-results-heading">
+
+        </section>
+    </main>
+    <footer id="main-footer">
+        <nav class="footer-nav"></nav>
+        <p id="copyright-info">&copy; 2026 BookFindr. All rights reserved.</p>
+    </footer>
+    <script src="js/nav.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

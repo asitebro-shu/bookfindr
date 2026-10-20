@@ -84,7 +84,7 @@ const api = (function(apiUrl) {
 
 const searchForm = document.getElementById('search-form');
 const searchResultsHeadingSection = document.querySelector('#search-results-heading');
-    const searchResultsBodySection = document.querySelector('#search-results-body');
+const searchResultsBodySection = document.querySelector('#search-results-body');
 
 async function addToReadingList(event) {
     event.preventDefault();
@@ -98,7 +98,6 @@ async function addToReadingList(event) {
         // Add a default status for the book.
         bookData['status'] = 'To Read';
         key = bookData['id'];
-        console.log(bookData);
         storage.put(`book_${key}`, bookData);
         const messageElement = document.getElementById(`result-message-${key}`);
         if (messageElement) {
@@ -122,6 +121,12 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;");
 }
 
+function toggleBookDescription(section, toggleBtn) {
+    const isHidden = section.hidden;
+    section.hidden = !isHidden;
+    toggleBtn.textContent = isHidden ? 'Hide details' : 'View details';
+}
+
 function displayBookResults(bookList) {
    
     searchResultsHeadingSection.innerHTML = '';
@@ -131,11 +136,7 @@ function displayBookResults(bookList) {
     searchResultsHeadingSection.appendChild(heading);
 
     if (bookList && bookList.length > 0) {
-        
-        
-
         bookList.forEach(book => {
-            console.log(book);
             const info = book.volumeInfo;
             const authors = info.authors?.join(', ') ?? 'Author unknown';
             const title = info.title ?? 'Untitled';
@@ -154,42 +155,61 @@ function displayBookResults(bookList) {
             img.alt = `${title} book cover thumbnail`;
             img.classList.add('book-thumbnail');
             resultItem.appendChild(img);
-
+            
+            const infoLink = document.createElement('a');
+            infoLink.setAttribute('href', info.infoLink);
+            infoLink.setAttribute('target','_blank');
+            infoLink.textContent = title;
             const h3 = document.createElement('h3');
-            h3.textContent = title;
+            h3.appendChild(infoLink);
             resultItem.appendChild(h3);
             
             const subtitleParagraph = document.createElement('p');
             subtitleParagraph.textContent = subtitle;
             resultItem.appendChild(subtitleParagraph);
 
-            const descParagraph = document.createElement('p');
-            descParagraph.textContent = description;
-            resultItem.appendChild(descParagraph);
-
             const authorsParagraph = document.createElement('p');
             authorsParagraph.textContent = `Author: ${authors}`;
             resultItem.appendChild(authorsParagraph);
 
+            const detailsSection = document.createElement('div');
+            detailsSection.classList.add('book-details');
+            detailsSection.setAttribute('id', `book-${book.id}-desc`);
+
+            const descParagraph = document.createElement('p');
+            descParagraph.textContent = description;
+            detailsSection.appendChild(descParagraph);
+
             const publishedParagraph = document.createElement('p');
             publishedParagraph.textContent = `Published: ${publishedDate}`;
-            resultItem.appendChild(publishedParagraph);
+            detailsSection.appendChild(publishedParagraph);
 
             const publisherParagraph = document.createElement('p');
             publisherParagraph.textContent = `Publisher: ${publisher}`;
-            resultItem.appendChild(publisherParagraph);
+            detailsSection.appendChild(publisherParagraph);
 
             const isbnParagraph = document.createElement('p');
             isbnParagraph.textContent = `ISBN: ${isbn}`;
-            resultItem.appendChild(isbnParagraph);
+            detailsSection.appendChild(isbnParagraph);
             
             const pageCountParagraph = document.createElement('p');
             pageCountParagraph.textContent = `Length: ${pageCount} pages`;
-            resultItem.appendChild(pageCountParagraph);
+            detailsSection.appendChild(pageCountParagraph);
 
             const categoriesParagraph = document.createElement('p');
             categoriesParagraph.textContent = `Categories: ${categories}`;
-            resultItem.appendChild(categoriesParagraph);
+            detailsSection.appendChild(categoriesParagraph);
+
+            detailsSection.hidden = true;
+            resultItem.appendChild(detailsSection);
+
+            const viewDetailsToggle = document.createElement('button');
+            viewDetailsToggle.type = 'button';
+            viewDetailsToggle.textContent = 'View details';
+            viewDetailsToggle.addEventListener('click', () => {
+                toggleBookDescription(detailsSection, viewDetailsToggle);
+            });
+            resultItem.appendChild(viewDetailsToggle);
 
             const readingListForm = document.createElement('form');
             readingListForm.classList.add('add-to-reading-list-form');
@@ -219,14 +239,9 @@ function displayBookResults(bookList) {
             infoLinkInput.setAttribute('value', info.infoLink);
             readingListForm.appendChild(infoLinkInput);
 
-            const infoAnchor = document.createElement('a');
-            infoAnchor.setAttribute('href', info.infoLink);
-            infoAnchor.setAttribute('target', '_blank');
-            infoAnchor.textContent = 'View details';
-            readingListForm.appendChild(infoAnchor);
-
             const readingListBtn = document.createElement('button');
             readingListBtn.setAttribute('type','submit');
+            readingListBtn.classList.add('btn-primary')
             readingListBtn.textContent = 'Add to reading list';
             readingListForm.appendChild(readingListBtn);
             
@@ -262,6 +277,7 @@ if (searchForm) {
         searchResultsBodySection.innerHTML = '';
         const result = await api.searchBooks(query);
         if (result) {
+            console.log(result);
             displayBookResults(result.data);
         }
 
@@ -292,11 +308,12 @@ if (readingListTable) {
         readingList.forEach(item => {
             const row = readingListTable.insertRow();
             const key = item.key;
-            console.log('Displaying book in reading list:', item);
-            const bookData = JSON.parse(item.value);
+            const bookData = item.value;
             row.insertCell(0).textContent = bookData.title;
             row.insertCell(1).textContent = bookData.authors;
-            const statusSelect = document.createElement('select');            
+            const statusSelect = document.createElement('select'); 
+            statusSelect.setAttribute('name', 'read-status');
+            statusSelect.setAttribute('id', `${key}-status`);        
             ['To Read', 'Reading', 'Finished'].forEach(status => {
                 const option = document.createElement('option');
                 option.value = status;
@@ -309,13 +326,25 @@ if (readingListTable) {
                 }
                 statusSelect.appendChild(option);
             });
+
+            // Update the read status of the current book when an option is selected
             statusSelect.addEventListener('change', function() {
                 bookData.status = this.value;
-                storage.put(key, JSON.stringify(bookData));
+                storage.put(key, bookData);
             });
-            row.insertCell(2).appendChild(statusSelect);
+            const sp = document.createElement('span');
+            const br = document.createElement('br');
+            const label = document.createElement('label');
+            label.textContent = 'Change status:';
+            label.setAttribute('for', `${key}-status`);
+            sp.appendChild(label);
+            sp.appendChild(br);
+            sp.appendChild(statusSelect);
+            row.insertCell(2).appendChild(sp);
             
             const removeButton = document.createElement('button');
+            removeButton.setAttribute('type', 'button');
+            
             removeButton.textContent = 'Remove';
             removeButton.addEventListener('click', function() {
                 // Confirm before removing the book from the reading list 

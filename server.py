@@ -5,11 +5,12 @@ PORT = 8000
 
 Handler = http.server.SimpleHTTPRequestHandler
 
-try:
-    with socketserver.TCPServer(("", PORT), Handler) as httpd:
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    try:
         print("serving at port", PORT)
         httpd.serve_forever()
 
-except KeyboardInterrupt:
-    httpd.shutdown()
-    print("\nServer stopped.")
+    except KeyboardInterrupt:
+        httpd.shutdown()
+        print("\nServer stopped.")
+        

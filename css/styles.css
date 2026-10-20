@@ -1,22 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* colour palette
-#0b3164
-#ffffff
-#104892
-#061a36
-#e6e6e6
-#155ec0 */
+*/
 
 :root {
-    --color-primary: #243b53;
+    --color-primary: #061a36;
     --color-secondary: #2a7f78;
     --color-background: #f5f7fa;
     --color-surface: #ffffff;
     --color-text: #24313d;
     --color-border: #d9e2ec;
-    --color-danger: #f44366;
+    --color-danger: #ff0000;
     --color-success: #04aa6d;
+
+    --a: #0b3164;
+    --b: #ffffff;
+    --c: #104892;
+    --d: #061a36;
+    --e:   #e6e6e6;
+    -f:  #155ec0;
 
     --spacing-small: 0.5rem;
     --spacing-medium: 1rem;
@@ -91,7 +93,7 @@ button {
 
 .btn-secondary {
     color: var(--color-background);
-    background-color: var(--color-secondary); 
+    background-color: var(--color-primary); 
 }
 
 .btn-success {
@@ -100,6 +102,11 @@ button {
 
 .btn-danger {
     background-color: var(--color-danger);
+}
+
+.btn-danger:hover {
+    color: var(--color-danger);
+    background-color: var(--color-background);
 }
 
 button:hover {
@@ -151,12 +158,17 @@ nav.main-nav {
     width: 100%;
 }
 
+/*
+Ref: https://www.w3schools.com/css/css_navbar_horizontal.asp
+*/
 nav.main-nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: var(--color-primary);
+    background-color: var(--color-background);
+    position: sticky;
+    top: 0;
 }
 
 nav.main-nav ul li {
@@ -165,15 +177,15 @@ nav.main-nav ul li {
 
 nav.main-nav ul li a {
     display: block;
-    color: var(--color-background);
+    color: var(--color-primary);
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
 }
 
 nav.main-nav li a:hover {
-    color: var(--color-primary);
-    background-color: var(--color-background);
+    color: var(--color-background);
+    background-color: var(--color-primary);
 }
 
 img.logo {
@@ -188,17 +200,6 @@ h1, h2, h3, h4, h5, h6 {
     color: #000080;
 }
 
-
-nav a {
-    color: #4b0082;
-    text-decoration: none;
-    margin-right: 1rem;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
 .secondary-text {
     font-weight: bold;
 }
@@ -209,7 +210,7 @@ nav a:hover {
 }
 
 a {
-    color: #4b0082;
+    color: var(--color-text);
     text-decoration: underline;
 }
 
@@ -243,6 +244,16 @@ td select {
     margin: 10px;
 }
 
+.book-card {
+    max-width: 100%;
+    margin: 5px auto;
+}
+
+.book-card img {
+    max-width:100%;
+    border: solid 1px var(--color-primary);
+}
+
 /**
  * Responsive CSS for BookFindr
  * Adjusts layout and font sizes based on wider screen width
@@ -251,8 +262,12 @@ td select {
  */
 
 @media screen and (min-width: 600px) {
-    button {
+    #search-form button {
         max-width: 31%;
+    }
+
+    .book-card {
+        max-width: 80%;
     }
 }
 
@@ -267,10 +282,6 @@ td select {
 
     h1 {
         font-size: 2.2vw;
-    }
-
-    #search-results-section {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -287,9 +298,13 @@ td select {
         font-size: 2vw;
     }
  
-    main {
+    header.main-header, footer.main-footer, nav.main-nav, main {
         max-width: 80%;
         margin: 0 auto;
         padding: 1rem;
+    }
+
+    .book-card {
+        max-width: 80%;
     }
 }

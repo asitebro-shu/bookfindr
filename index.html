@@ -12,7 +12,7 @@
     <title>BookFindr</title>
 </head>
 <body>
-    <header id="main-header">
+    <header class="main-header">
         <a href="/" class="logo-wrapper">
             <img src="img/logo.png" alt="BookFindr Logo" class="logo">
         </a>
@@ -21,24 +21,28 @@
         </section>
     </header>
     <nav class="main-nav" aria-label="Main Navigation">
-        <a href="index.html">Home</a>
-        <a href="my-list.html">My Reading</a>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li style="float:right"><a href="my-list.html">My Reading</a></li>
+        </ul>
     </nav>
     <main>
-        
-        <section aria-labelledby="search-form">
-            <form id="search-form">
-                <fieldset>
-                    <legend><p>Use the search bar below to find books by title, author, or keyword.</p></legend>
+        <section aria-labelledby="search-form-section">
+            <p>Use the search bar below to find books by title, author, or keyword.</p>
+            <form id="search-form" class="container">
+                <div class="row">
                     <input type="search" id="search-query" name="search-query" autofocus placeholder="Enter a book title, author, or keyword" required aria-label="Enter a book title, author, or keyword">
-                    <button type="submit">Search</button>
-                    <button type="button" id="surprise-button">Surprise Me</button>
-                    <button type="reset">Clear</button>
-                </fieldset>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn-primary">Search</button>
+                    <button type="button" id="surprise-button" class="btn-primary">Surprise Me</button>
+                    <button type="reset" class="btn-secondary">Clear</button>
+                </div>
             </form>
         </section>
         <section id="search-results-section" aria-live="polite" aria-labelledby="search-results-heading">
-
+            <div id="search-results-heading"></div>
+            <div id="search-results-body"></div>
         </section>
     </main>
     <footer id="main-footer">

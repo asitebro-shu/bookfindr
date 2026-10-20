@@ -83,7 +83,8 @@ const api = (function(apiUrl) {
 
 
 const searchForm = document.getElementById('search-form');
-const resultsContainer = document.getElementById('search-results-section');
+const searchResultsHeadingSection = document.querySelector('#search-results-heading');
+    const searchResultsBodySection = document.querySelector('#search-results-body');
 
 async function addToReadingList(event) {
     event.preventDefault();
@@ -122,14 +123,19 @@ function escapeHtml(unsafe) {
 }
 
 function displayBookResults(bookList) {
+   
+    searchResultsHeadingSection.innerHTML = '';
+    searchResultsBodySection.innerHTML = '';
+    const heading = document.createElement('h2');
+    heading.textContent = 'Search Results';
+    searchResultsHeadingSection.appendChild(heading);
+
     if (bookList && bookList.length > 0) {
-        resultsContainer.innerHTML = '';
-        const heading = document.createElement('h2');
-        heading.id = 'search-results-heading';
-        heading.textContent = 'Search Results';
-        resultsContainer.appendChild(heading);
+        
+        
 
         bookList.forEach(book => {
+            console.log(book);
             const info = book.volumeInfo;
             const authors = info.authors?.join(', ') ?? 'Author unknown';
             const title = info.title ?? 'Untitled';
@@ -230,10 +236,10 @@ function displayBookResults(bookList) {
 
             resultItem.appendChild(readingListForm);
 
-            resultsContainer.appendChild(resultItem);
+            searchResultsBodySection.appendChild(resultItem);
             });
         } else {
-            resultsContainer.innerHTML = '<p>No results found.</p>';
+            searchResultsBodySection.innerHTML = '<p>No results found.</p>';
         }
 }
 
@@ -244,7 +250,7 @@ if (searchForm) {
         event.preventDefault();
         const loadingMessage = document.createElement('p');
         loadingMessage.textContent = 'Searching for books...';
-        resultsContainer.appendChild(loadingMessage);
+        searchResultsBodySection.appendChild(loadingMessage);
 
         const searchInput = document.querySelector('#search-query');
 
@@ -253,7 +259,7 @@ if (searchForm) {
             searchInput.focus();
             return;
         }
-        resultsContainer.innerHTML = '';
+        searchResultsBodySection.innerHTML = '';
         const result = await api.searchBooks(query);
         if (result) {
             displayBookResults(result.data);
@@ -263,7 +269,7 @@ if (searchForm) {
     const surpriseButton = document.getElementById('surprise-button');
     surpriseButton.addEventListener('click', async function() {
         try {
-            resultsContainer.innerHTML = '';
+            searchResultsBodySection.innerHTML = '';
             const randomBook = await api.getRandomBook();
             if (randomBook) {
                 displayBookResults([randomBook.data]);

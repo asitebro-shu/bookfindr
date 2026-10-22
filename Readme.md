@@ -10,8 +10,5 @@ The application allows a user to:
 6. Filter the reading list.
 7. Persist the reading list using localStorage.
 
-https://developers.google.com/books/docs/overview
-https://developers.google.com/books/docs/v1/getting_started
-https://developers.google.com/books/docs/v1/using
-
+- https://freeapi.app/docs#tag/public-apis/GET/public/books
 
